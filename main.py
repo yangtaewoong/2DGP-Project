@@ -7,6 +7,8 @@ open_canvas(width, height)
 # 이미지 로드
 intro_image = load_image('resource/screen/intro.png')
 select_stage_image = load_image('resource/stage_select/select_map_3.png')
+stage1_image = load_image('resource/stage_select/background1.png')
+
 
 # Play 버튼 위치 및 크기
 play_button_x, play_button_y, play_button_width, play_button_height = 200, 50, 300, 200
