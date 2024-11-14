@@ -1,9 +1,14 @@
 from pico2d import *
 import framework
+import stage1
 
 # 이미지 로드
-select_stage_image = None
 width, height = 1060, 800
+select_button_x, select_button_y,select_button_width, select_button_height = 330, 380, 100, 150
+
+def is_inside_button(x, y, button_x, button_y, button_width, button_height):
+    return (button_x - button_width // 2 <= x <= button_x + button_width // 2 and
+            button_y - button_height // 2 <= y <= button_y + button_height // 2)
 
 class SelectStageState:
     def init(self):
@@ -19,7 +24,12 @@ class SelectStageState:
     def handle_events(self):
         events = get_events()
         for event in events:
-            if event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
+            if event.type == SDL_MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.x, height - event.y
+                if is_inside_button(mouse_x, mouse_y, select_button_x, select_button_y,select_button_width, select_button_height):
+                    print("Play 버튼이 클릭되었습니다! SelectStageState로 전환합니다.")
+                    framework.change_mode(stage1.Stage1State())
+            elif event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
                 framework.quit()
 
     def update(self):
@@ -28,4 +38,11 @@ class SelectStageState:
     def draw(self):
         clear_canvas()
         select_stage_image.draw(width // 2, height // 2, width, height)
+
+        left = select_button_x - (select_button_width // 2)
+        right = select_button_x + (select_button_width // 2)
+        bottom = select_button_y - (select_button_height // 2)
+        top = select_button_y + (select_button_height // 2)
+        draw_rectangle(left, bottom, right, top)
+
         update_canvas()

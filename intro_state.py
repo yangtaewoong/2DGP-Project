@@ -1,13 +1,11 @@
 from pico2d import *
 import framework
 import select_stage_state  # 상태 전환을 위해 SelectStageState 모듈을 가져옴
-
 # 이미지 로드
-intro_image = None
 width, height = 1060, 800
 
 # Play 버튼 위치 및 크기
-play_button_x, play_button_y, play_button_width, play_button_height = 200, 50, 300, 200
+play_button_x, play_button_y, play_button_width, play_button_height = 180, 100, 250, 180
 
 def is_inside_button(x, y, button_x, button_y, button_width, button_height):
     return (button_x - button_width // 2 <= x <= button_x + button_width // 2 and
@@ -41,4 +39,11 @@ class IntroState:
     def draw(self):
         clear_canvas()
         intro_image.draw(width // 2, height // 2, width, height)
+
+        left = play_button_x - (play_button_width // 2)
+        right = play_button_x + (play_button_width // 2)
+        bottom = play_button_y - (play_button_height // 2)
+        top = play_button_y + (play_button_height // 2)
+        draw_rectangle(left, bottom, right, top)
+
         update_canvas()
