@@ -2,7 +2,7 @@ from pico2d import *
 import framework
 import select_stage_state  # 상태 전환을 위해 SelectStageState 모듈을 가져옴
 # 이미지 로드
-width, height = 1060, 800
+width, height = 1060, 700
 
 # Play 버튼 위치 및 크기
 play_button_x, play_button_y, play_button_width, play_button_height = 180, 100, 250, 180

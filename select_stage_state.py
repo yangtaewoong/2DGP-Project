@@ -3,8 +3,8 @@ import framework
 import stage1
 
 # 이미지 로드
-width, height = 1060, 800
-select_button_x, select_button_y,select_button_width, select_button_height = 330, 380, 100, 150
+width, height = 1060, 700
+select_button_x, select_button_y,select_button_width, select_button_height = 330, 330, 100, 150
 
 def is_inside_button(x, y, button_x, button_y, button_width, button_height):
     return (button_x - button_width // 2 <= x <= button_x + button_width // 2 and

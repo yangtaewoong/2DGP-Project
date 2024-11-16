@@ -17,13 +17,13 @@ class Idle:
     def enter(character, e):
         if start_event(e):
             character.action = 0
-            character.dir = 1
-        elif a_down(e) or d_up(e):
-            character.action = 1
-            character.dir = -1
+            character.face_dir = 1
         elif d_down(e) or a_up(e):
             character.action = 0
-            character.dir = 1
+            character.face_dir = 1
+        elif a_down(e) or d_up(e):
+            character.action = 1
+            character.face_dir = -1
 
         character.frame = 0
 
@@ -44,9 +44,9 @@ class Run:
     @staticmethod
     def enter(character, e):
         if d_down(e) or a_up(e):
-            character.dir, character.action = 1, 0
+            character.dir,character.face_dir ,character.action = 1,1,0
         elif a_down(e) or d_up(e):
-            character.dir, character.action = -1, 1
+            character.dir, character.face_dir, character.action = -1, -1 ,1
 
     @staticmethod
     def exit(character, e):
@@ -64,8 +64,9 @@ class Run:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 100, 200
+        self.x, self.y = 100, 400
         self.frame = 0
+        self.face_dir = 1
         self.image = load_image('resource/player/player_move.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -89,6 +90,9 @@ class Character:
     def get_bb(self):
         #return self.x - 20, self.y - 50, self.x + 20, self.y + 50
         pass
+
+    def get_position(self):
+        return self.x, self.y
 
     def handle_collision(self, group, other):
         pass
