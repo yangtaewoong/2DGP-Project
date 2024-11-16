@@ -9,6 +9,10 @@ def handle_events(self):
     for event in events:
         if event.type == SDL_QUIT:
             framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            framework.quit()
+        else:
+            character.handle_event(event)
 
 def init(self):
     global character
