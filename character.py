@@ -4,7 +4,7 @@ import framework
 from state_machine import*
 
 PIXEL_PER_METER = (10.0 / 0.4)
-RUN_SPEED_KMPH = 30.0
+RUN_SPEED_KMPH = 20.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -64,7 +64,7 @@ class Run:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 100, 400
+        self.x, self.y = 100, 380
         self.frame = 0
         self.face_dir = 1
         self.image = load_image('resource/player/player_move.png')
@@ -86,6 +86,9 @@ class Character:
 
     def draw(self):
         self.state_machine.draw()
+
+    def draw_at(self, screen_x, screen_y):
+        self.state_machine.cur_state.draw(self)
 
     def get_bb(self):
         #return self.x - 20, self.y - 50, self.x + 20, self.y + 50
