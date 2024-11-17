@@ -5,11 +5,18 @@ collision_pairs = {} # 빈 딕셔너리
 
 def add_collision_pair(group, a, b):
     if group not in collision_pairs:
-       collision_pairs[group] = [ [], [] ]
-    if a:
+        collision_pairs[group] = [[], []]
+    # a와 b가 리스트인지 확인하고 개별 객체를 추가
+    if isinstance(a, list):
+        collision_pairs[group][0].extend(a)
+    elif a:
         collision_pairs[group][0].append(a)
-    if b:
+
+    if isinstance(b, list):
+        collision_pairs[group][1].extend(b)
+    elif b:
         collision_pairs[group][1].append(b)
+
 
 def add_object(o, depth = 0):
     world[depth].append(o)
