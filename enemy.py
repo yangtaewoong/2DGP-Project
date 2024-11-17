@@ -32,14 +32,20 @@ class Enemy:
             self.time += framework.frame_time
             if self.time > 1.0:  # 공격 타이밍
                 self.time = 0
-                print("Enemy attacks!")
+        if self.state == 2:
+            pass
 
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 50, 0, 50, 65, self.x, self.y, 100, 130)
         if self.stamina > 0:
+            if self.state == 0:
+                self.image.clip_draw(int(self.frame) * 50, 0, 50, 65, self.x, self.y, 100, 130)
+            elif self.state == 1:
+                self.image.clip_draw(int(self.frame) * 50, 0, 50, 65, self.x, self.y, 100, 130)
             self.font.draw(self.x - 10, self.y + 74, f'{self.stamina}', (255, 255, 255))
             draw_rectangle(*self.get_bb())
+        if self.state == 2:
+            pass
 
     def get_bb(self):
         return self.x - 40, self.y - 60, self.x + 40, self.y + 60

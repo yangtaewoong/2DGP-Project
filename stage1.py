@@ -44,10 +44,10 @@ class Stage1State:
         self.enemies = [Enemy() for _ in range(3)]
 
         # 충돌 그룹 추가
-        game_world.add_object(self.character)
-        game_world.add_object(self.dragon)
+        game_world.add_object(self.character, 1)
+        game_world.add_object(self.dragon, 1)
         for enemy in self.enemies:
-            game_world.add_object(enemy)
+            game_world.add_object(enemy,1)
 
         # 충돌 그룹 등록
         game_world.add_collision_pair('dragon:enemy', self.dragon, self.enemies)
@@ -55,6 +55,11 @@ class Stage1State:
         print("Stage1: 첫 번째 스테이지 화면입니다.")
 
     def finish(self):
+        game_world.remove_object(self.character)
+        game_world.remove_object(self.dragon)
+        for enemy in self.enemies:
+            game_world.remove_object(enemy)
+
         del self.bg
         del self.character
         del self.ui

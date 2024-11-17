@@ -30,11 +30,14 @@ class Dragon:
 
         if self.state == 0 and not self.iscollision:
             self.x += RUN_SPEED_PPS * framework.frame_time
-            self.x = min(self.x, 1700)  # 오른쪽 경계 제한
-        elif self.state == 1:  # Attack 상태
+            self.x = min(self.x, 1700)
+        elif self.state == 1:
             self.time += framework.frame_time
-            if self.time > 1.0:  # 공격 타이밍
+            if self.time > 1.0:
                 self.time = 0
+        if self.state == 2:
+            pass
+
 
     def draw(self):
         if self.stamina > 0:
