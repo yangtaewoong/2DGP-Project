@@ -61,7 +61,7 @@ class Stage1State:
 
         # 스크롤 기준점과 한계 처리
         scroll_start = 200
-        max_offset = self.bg.width - width
+        max_offset = self.bg.width - 2197
 
         # 스크롤 계산: 캐릭터가 기준점을 넘어가면 x_offset 변경
         if char_x > scroll_start:
@@ -69,8 +69,8 @@ class Stage1State:
         else:
             self.x_offset = 0
 
-        # x_offset 제한: 배경 범위 초과 방지
         self.x_offset = max(0, min(self.x_offset, max_offset))
+        print(f"Character X: {char_x}, X Offset: {self.x_offset}, Max Offset: {max_offset}")
 
     def draw(self):
         clear_canvas()
