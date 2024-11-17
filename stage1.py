@@ -1,5 +1,6 @@
 from pico2d import *
 from character import Character
+from dragon import Dragon
 import framework
 
 width, height = 1060, 510
@@ -14,7 +15,6 @@ class BG:
         # 배경 이미지를 스크롤된 위치에 맞게 그리기
         self.image.draw(width // 2 - x_offset, y_offset, self.width, self.height)
 
-
 class UI:
     def __init__(self):
         self.image = load_image('resource/ui.png')
@@ -23,20 +23,21 @@ class UI:
         # 화면 상단 중앙에 UI 표시
         self.image.draw(530,155)
 
-
 class Stage1State:
     def __init__(self):
-        self.x_offset = 0  # 화면의 x 오프셋
-        self.y_offset = 500  # 화면의 y 오프셋
-        self.scroll_speed = 5  # 스크롤 속도
-        self.bg = None  # 배경 객체
-        self.character = None  # 캐릭터 객체
+        self.x_offset = 0
+        self.y_offset = 500
+        self.scroll_speed = 5
+        self.bg = None
+        self.character = None
+        self.dragon = None
         self.ui = None  # UI 객체
 
     def init(self):
-        self.bg = BG('resource/background1.png')  # 배경 객체 생성
-        self.character = Character()  # 캐릭터 객체 생성
-        self.ui = UI()  # UI 객체 생성
+        self.bg = BG('resource/background1.png')
+        self.character = Character()
+        self.ui = UI()
+        self.dragon = Dragon()
         print("Stage1: 첫 번째 스테이지 화면입니다.")
 
     def finish(self):
@@ -55,6 +56,7 @@ class Stage1State:
 
     def update(self):
         self.character.update()
+        self.dragon.update()
 
         # 캐릭터의 월드 좌표 가져오기
         char_x, char_y = self.character.get_position()
@@ -89,6 +91,7 @@ class Stage1State:
             205, 120,
             screen_x, screen_y, 307.5, 180
         )
+        self.dragon.draw()
 
         # UI 그리기
         self.ui.draw()
