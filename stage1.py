@@ -2,8 +2,11 @@ from pico2d import *
 from character import Character
 from dragon import Dragon
 from enemy import Enemy
+from mace_1 import Mace1
 import framework
 import game_world
+
+
 
 width, height = 1060, 510
 
@@ -34,6 +37,7 @@ class Stage1State:
         self.character = None
         self.dragon = None
         self.enemies = []
+        self.maces = []
         self.ui = None  # UI 객체
 
     def init(self):
@@ -61,12 +65,13 @@ class Stage1State:
         game_world.remove_object(self.dragon)
         for enemy in self.enemies:
             game_world.remove_object(enemy)
+        for mace in self.maces:
+            game_world.remove_object(mace)
 
         del self.bg
         del self.character
         del self.ui
         del self.dragon
-        del self.enemies
         print("Stage: 종료합니다.")
 
     def handle_events(self):
@@ -76,12 +81,20 @@ class Stage1State:
                 framework.quit()
             elif event.type == SDL_KEYDOWN:
                 self.character.handle_event(event)
+                if event.key == SDLK_j:
+                    new_mace = Mace1( self.character.x - self.x_offset, self.character.y)
+                    self.maces.append(new_mace)
+                    game_world.add_object(new_mace, 1)
+                    print("메이스 생성!")
 
     def update(self):
         self.character.update()
         self.dragon.update()
         for enemy in self.enemies:
             enemy.update()
+
+        for mace in self.maces:
+            mace.update()
 
         char_x, char_y = self.character.get_position()
 
@@ -100,11 +113,10 @@ class Stage1State:
     def draw(self):
         clear_canvas()
 
-        # 배경 그리기
         self.bg.draw(self.x_offset, self.y_offset)
 
-        screen_x = self.character.x - self.x_offset  # 화면 내 캐릭터의 X 좌표
-        screen_y = self.character.y  # Y 좌표는 변하지 않음
+        screen_x = self.character.x - self.x_offset
+        screen_y = self.character.y
         self.character.font.draw(screen_x-30, screen_y + 100, f'{self.character.stamina}', (255, 255, 255))
         self.character.image.clip_draw(
             int(self.character.frame) * 210,
@@ -115,7 +127,10 @@ class Stage1State:
         self.dragon.draw()
         for enemy in self.enemies:
             enemy.draw()
-        # UI 그리기
+
+        for mace in self.maces:
+            mace.draw()
+
         self.ui.draw()
 
         update_canvas()
