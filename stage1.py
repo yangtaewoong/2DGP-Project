@@ -50,7 +50,9 @@ class Stage1State:
             game_world.add_object(enemy,1)
 
         # 충돌 그룹 등록
-        game_world.add_collision_pair('dragon:enemy', self.dragon, self.enemies)
+        game_world.add_collision_pair('dragon:enemy', self.dragon, None)
+        for enemy in self.enemies:
+            game_world.add_collision_pair('dragon:enemy', None, enemy)
 
         print("Stage1: 첫 번째 스테이지 화면입니다.")
 
@@ -103,7 +105,7 @@ class Stage1State:
 
         screen_x = self.character.x - self.x_offset  # 화면 내 캐릭터의 X 좌표
         screen_y = self.character.y  # Y 좌표는 변하지 않음
-
+        self.character.font.draw(screen_x-30, screen_y + 100, f'{self.character.stamina}', (255, 255, 255))
         self.character.image.clip_draw(
             int(self.character.frame) * 210,
             self.character.action * 120,

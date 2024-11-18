@@ -43,12 +43,13 @@ def remove_collision_object(o):
             pairs[1].remove(o)
 
 def remove_object(o):
+ # 게임 월드에서 객체를 제거
     for layer in world:
         if o in layer:
             layer.remove(o)
             remove_collision_object(o)
-            del o # 메모리에서 객체 자체를 삭제
             return
+
     raise ValueError('Cannot delete non existing object')
 
 
@@ -78,7 +79,6 @@ def handle_collisions():
         for a in pairs[0]:
             for b in pairs[1]:
                 if collide(a, b):
-                    print(f'{group} collide')
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
 

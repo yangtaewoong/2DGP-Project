@@ -67,6 +67,8 @@ class Character:
         self.x, self.y = 100, 380
         self.frame = 0
         self.face_dir = 1
+        self.stamina = 100
+        self.font = load_font('resource/ENCR10B.TTF', 30)
         self.image = load_image('resource/player/player_move.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -88,6 +90,7 @@ class Character:
         self.state_machine.draw()
 
     def draw_at(self, screen_x, screen_y):
+
         self.state_machine.cur_state.draw(self)
 
     def get_bb(self):
