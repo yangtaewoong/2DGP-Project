@@ -3,6 +3,7 @@ from character import Character
 from dragon import Dragon
 from enemy import Enemy
 from mace_1 import Mace1
+from mace_2 import Mace2
 import framework
 import game_world
 
@@ -38,6 +39,7 @@ class Stage1State:
         self.dragon = None
         self.enemies = []
         self.maces = []
+        self.maces2 =[]
         self.ui = None  # UI 객체
 
     def init(self):
@@ -67,6 +69,8 @@ class Stage1State:
             game_world.remove_object(enemy)
         for mace in self.maces:
             game_world.remove_object(mace)
+        for mace2 in self.maces2:
+            game_world.remove_object(mace2)
 
         del self.bg
         del self.character
@@ -85,7 +89,10 @@ class Stage1State:
                     new_mace = Mace1( self.character.x - self.x_offset, self.character.y)
                     self.maces.append(new_mace)
                     game_world.add_object(new_mace, 1)
-                    print("메이스 생성!")
+                if event.key == SDLK_k:
+                    new_mace2 = Mace2(self.character.x - self.x_offset + 100, self.character.y)
+                    self.maces.append(new_mace2)
+                    game_world.add_object(new_mace2, 1)
 
     def update(self):
         self.character.update()
@@ -95,6 +102,9 @@ class Stage1State:
 
         for mace in self.maces:
             mace.update()
+
+        for mace2 in self.maces2:
+            mace2.update()
 
         char_x, char_y = self.character.get_position()
 
@@ -130,6 +140,9 @@ class Stage1State:
 
         for mace in self.maces:
             mace.draw()
+
+        for mace2 in self.maces2:
+            mace2.draw()
 
         self.ui.draw()
 

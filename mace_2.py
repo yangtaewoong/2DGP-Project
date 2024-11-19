@@ -13,24 +13,25 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
-class Mace1:
+class Mace2:
     def __init__(self, x , y ):
         self.x, self.y,  = x,y
         self.frame = 0
         self.is_removed = False
         self.iscollision = 1
-        self.image = load_image('resource/mace/mace1_effect.png')
+        self.image = load_image('resource/mace/mace2_effect.png')
+        self.elapsed_time = 0
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * framework.frame_time) % 5
-        self.x += 1 * RUN_SPEED_PPS * framework.frame_time / 0.3
-        if self.x > 1100 and not self.is_removed:
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * framework.frame_time) % 3
+        self.elapsed_time+= 0.01
+        if self.elapsed_time >= 3.0 and not self.is_removed:
             game_world.remove_object(self)
             self.is_removed = True
 
     def draw(self):
-        if self.x < 1100:
-            self.image.clip_draw(int(self.frame) * 65, 0, 65, 57, self.x, self.y, 131.6, 114)
+        if not self.is_removed:
+            self.image.clip_draw(int(self.frame) * 161, 0, 161, 71, self.x + 230, self.y - 50, 330, 228)
             draw_rectangle(*self.get_bb())
 
     def get_bb(self):
@@ -38,5 +39,5 @@ class Mace1:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'enemy:mace1':
+        if group == 'enemy:mace2':
             self.iscollision = 1
