@@ -14,8 +14,8 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 class Dragon:
-    def __init__(self):
-        self.x, self.y = 100, 400
+    def __init__(self,x,y):
+        self.x, self.y = x, y
         self.iscollision = 0
         self.is_removed = False
         self.state = 0  # 0: walk, 1: attack, 2: die

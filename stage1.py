@@ -36,27 +36,28 @@ class Stage1State:
         self.scroll_speed = 5
         self.bg = None
         self.character = None
-        self.dragon = None
         self.enemies = []
         self.maces = []
         self.maces2 =[]
+        self.dragons = []
         self.ui = None  # UI 객체
 
     def init(self):
         self.bg = BG('resource/background1.png')
         self.character = Character()
         self.ui = UI()
-        self.dragon = Dragon()
         self.enemies = [Enemy() for _ in range(3)]
 
         # 충돌 그룹 추가
         game_world.add_object(self.character, 1)
-        game_world.add_object(self.dragon, 1)
+        for dragon in self.dragons:
+            game_world.add_object(dragon, 1)
+
         for enemy in self.enemies:
             game_world.add_object(enemy,1)
 
         # 충돌 그룹 등록
-        game_world.add_collision_pair('dragon:enemy', self.dragon, None)
+        game_world.add_collision_pair('dragon:enemy', self.dragons, None)
         for enemy in self.enemies:
             game_world.add_collision_pair('dragon:enemy', None, enemy)
 
@@ -64,7 +65,7 @@ class Stage1State:
 
     def finish(self):
         game_world.remove_object(self.character)
-        game_world.remove_object(self.dragon)
+        game_world.remove_object(self.dragons)
         for enemy in self.enemies:
             game_world.remove_object(enemy)
         for mace in self.maces:
@@ -72,10 +73,12 @@ class Stage1State:
         for mace2 in self.maces2:
             game_world.remove_object(mace2)
 
+        for dragon in self.dragons:
+            game_world.remove_object(dragon)
+
         del self.bg
         del self.character
         del self.ui
-        del self.dragon
         print("Stage: 종료합니다.")
 
     def handle_events(self):
@@ -93,10 +96,17 @@ class Stage1State:
                     new_mace2 = Mace2(self.character.x - self.x_offset + 100, self.character.y)
                     self.maces.append(new_mace2)
                     game_world.add_object(new_mace2, 1)
+                if event.key == SDLK_2:
+                    new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
+                    self.dragons.append(new_dragon)
+
 
     def update(self):
         self.character.update()
-        self.dragon.update()
+
+        for dragon in self.dragons:
+            dragon.update()
+
         for enemy in self.enemies:
             enemy.update()
 
@@ -134,7 +144,10 @@ class Stage1State:
             205, 120,
             screen_x, screen_y, 307.5, 180
         )
-        self.dragon.draw()
+
+        for dragon in self.dragons:
+            dragon.draw()
+
         for enemy in self.enemies:
             enemy.draw()
 
