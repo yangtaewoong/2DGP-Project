@@ -20,8 +20,8 @@ class Dragon:
         self.is_removed = False
         self.state = 0  # 0: walk, 1: attack, 2: die
         self.frame = 0
-        self.image = load_image('resource/player_unit/dragon.png')  # 드래곤 이미지 로드
-        self.font = load_font('resource/ENCR10B.TTF', 20) # 폰트 로드
+        self.image = load_image('resource/player_unit/dragon.png')
+        self.font = load_font('resource/ENCR10B.TTF', 20)
         self.stamina = 40
         self.time = 0.0
 

@@ -1,6 +1,7 @@
 from pico2d import *
 from character import Character
 from dragon import Dragon
+from mouse import Mouse
 from enemy import Enemy
 from mace_1 import Mace1
 from mace_2 import Mace2
@@ -14,11 +15,10 @@ width, height = 1060, 510
 class BG:
     def __init__(self, image_path):
         self.image = load_image(image_path)
-        self.width = 3257  # 배경 이미지의 너비
-        self.height = 578  # 배경 이미지의 높이
+        self.width = 3257
+        self.height = 578
 
     def draw(self, x_offset, y_offset):
-        # 배경 이미지를 스크롤된 위치에 맞게 그리기
         self.image.draw(width // 2 - x_offset, y_offset, self.width, self.height)
 
 class UI:
@@ -26,7 +26,6 @@ class UI:
         self.image = load_image('resource/ui.png')
 
     def draw(self):
-        # 화면 상단 중앙에 UI 표시
         self.image.draw(530,155)
 
 class Stage1State:
@@ -40,6 +39,7 @@ class Stage1State:
         self.maces = []
         self.maces2 =[]
         self.dragons = []
+        self.mouses =[]
         self.ui = None  # UI 객체
 
     def init(self):
@@ -53,6 +53,9 @@ class Stage1State:
         for dragon in self.dragons:
             game_world.add_object(dragon, 1)
 
+        for mouse in self.mouses:
+            game_world.add_object(mouse, 1)
+
         for enemy in self.enemies:
             game_world.add_object(enemy,1)
 
@@ -65,13 +68,15 @@ class Stage1State:
 
     def finish(self):
         game_world.remove_object(self.character)
-        game_world.remove_object(self.dragons)
         for enemy in self.enemies:
             game_world.remove_object(enemy)
         for mace in self.maces:
             game_world.remove_object(mace)
         for mace2 in self.maces2:
             game_world.remove_object(mace2)
+
+        for mouse in self.mouses:
+            game_world.remove_object(mouse)
 
         for dragon in self.dragons:
             game_world.remove_object(dragon)
@@ -99,6 +104,9 @@ class Stage1State:
                 if event.key == SDLK_2:
                     new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
                     self.dragons.append(new_dragon)
+                if event.key == SDLK_1:
+                    new_mouse = Mouse(self.character.x - self.x_offset, self.character.y)
+                    self.mouses.append(new_mouse)
 
 
     def update(self):
@@ -106,6 +114,9 @@ class Stage1State:
 
         for dragon in self.dragons:
             dragon.update()
+
+        for mouse in self.mouses:
+            mouse.update()
 
         for enemy in self.enemies:
             enemy.update()
@@ -147,6 +158,9 @@ class Stage1State:
 
         for dragon in self.dragons:
             dragon.draw()
+
+        for mouse in self.mouses:
+            mouse.draw()
 
         for enemy in self.enemies:
             enemy.draw()
