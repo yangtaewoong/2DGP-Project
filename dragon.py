@@ -56,7 +56,7 @@ class Dragon:
         return self.x - 85, self.y - 85, self.x + 85, self.y + 85
 
     def handle_collision(self, group,other):
-        if group == "dragon:enemy":
+        if group == 'dragon:enemy':
             self.iscollision = 1
             self.state = 1
             other.state = 1

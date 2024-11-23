@@ -61,8 +61,12 @@ class Stage1State:
 
         # 충돌 그룹 등록
         game_world.add_collision_pair('dragon:enemy', self.dragons, None)
+        game_world.add_collision_pair('mouse:enemy', self.mouses, None)
         for enemy in self.enemies:
             game_world.add_collision_pair('dragon:enemy', None, enemy)
+
+        for enemy in self.enemies:
+            game_world.add_collision_pair('mouse:enemy', None, enemy)
 
         print("Stage1: 첫 번째 스테이지 화면입니다.")
 
@@ -107,7 +111,6 @@ class Stage1State:
                 if event.key == SDLK_1:
                     new_mouse = Mouse(self.character.x - self.x_offset, self.character.y)
                     self.mouses.append(new_mouse)
-
 
     def update(self):
         self.character.update()

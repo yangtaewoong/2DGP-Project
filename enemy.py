@@ -50,7 +50,7 @@ class Enemy:
         return self.x - 40, self.y - 60, self.x + 40, self.y + 60
 
     def handle_collision(self, other, group):
-        if group == 'enemy:mouse' or group == 'dragon:enemy' or group == 'enemy:rhino':
+        if group == 'dragon:enemy' or group == 'mouse:enemy':
             self.iscollision = True
             self.state = 1
             other.state = 1
