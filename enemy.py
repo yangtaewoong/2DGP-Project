@@ -17,7 +17,7 @@ class Enemy:
     def __init__(self):
         self.x, self.y = random.randint(1100, 1600), 380
         self.state = 0  # 0: walk, 1: attack, 2: die
-        self.iscollision = False
+        self.iscollision = 0
         self.is_removed = False
         self.frame = 0
         self.image = load_image('resource/enemy/zombie1.png')
@@ -27,12 +27,11 @@ class Enemy:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * framework.frame_time) % 5
-        if self.state == 0 and self.iscollision == 0:  # 걷는 상태이고 충돌하지 않은 경우
+        if self.iscollision == 0:
             self.x -= RUN_SPEED_PPS * framework.frame_time / 1.8
         elif self.iscollision == 1:
             self.time += 0.1
-        if self.stamina <= 0 and not self.is_removed:
-            print(f'삭제')
+        if self.state==2 and not self.is_removed:
             game_world.remove_object(self)
             self.is_removed = True
 
@@ -49,23 +48,26 @@ class Enemy:
     def get_bb(self):
         return self.x - 40, self.y - 60, self.x + 40, self.y + 60
 
-    def handle_collision(self, other, group):
+    def handle_collision(self, group, other):
         if group == 'dragon:enemy' or group == 'mouse:enemy':
-            self.iscollision = True
+            self.iscollision = 1
             self.state = 1
             other.state = 1
             if self.time >= 4.0:
                 self.time = 0.0
+                self.stamina -= 10
                 other.stamina -= 5
-            self.font.draw(self.x + 10, self.y + 94, f'{-30}', (255, 255, 255))
-        elif group == 'enemy:mace_1':
-            self.stamina -= 1
+            if self.stamina <= 0:
+                self.state = 2
+            if other.stamina <= 0:
+                self.state = 0
+                self.iscollision = 0
+
+        elif group == 'mace1:enemy':
+            self.stamina -= 30
         elif group == 'enemy:player':
             self.iscollision = 1
             if self.time >= 6.0:
                 self.time = 0.0
                 self.font.draw(self.x + 10, self.y + 94, f'{-30}', (255, 255, 255))
 
-    def set_collision(self, input):
-        self.iscollision = input
-        pass

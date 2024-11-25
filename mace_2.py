@@ -40,4 +40,4 @@ class Mace2:
 
     def handle_collision(self, other, group):
         if group == 'enemy:mace2':
-            self.iscollision = 1
+            other.state =2

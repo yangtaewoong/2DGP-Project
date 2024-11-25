@@ -57,8 +57,6 @@ def clear():
     for layer in world:
         layer.clear()
 
-
-
 # fill here
 def collide(a, b):
     al,ab,ar,at = a.get_bb()

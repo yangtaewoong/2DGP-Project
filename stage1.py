@@ -3,6 +3,7 @@ from character import Character
 from dragon import Dragon
 from mouse import Mouse
 from enemy import Enemy
+from enemy2 import Enemy2
 from mace_1 import Mace1
 from mace_2 import Mace2
 import framework
@@ -36,6 +37,7 @@ class Stage1State:
         self.bg = None
         self.character = None
         self.enemies = []
+        self.enemies2 = []
         self.maces = []
         self.maces2 =[]
         self.dragons = []
@@ -47,9 +49,9 @@ class Stage1State:
         self.character = Character()
         self.ui = UI()
         self.enemies = [Enemy() for _ in range(3)]
-
-        # 충돌 그룹 추가
+        self.enemies2 = [Enemy2() for _ in range(3)]
         game_world.add_object(self.character, 1)
+
         for dragon in self.dragons:
             game_world.add_object(dragon, 1)
 
@@ -59,16 +61,44 @@ class Stage1State:
         for enemy in self.enemies:
             game_world.add_object(enemy,1)
 
-        # 충돌 그룹 등록
+        for enemy2 in self.enemies2:
+            game_world.add_object(enemy2,1)
+
+        for mace in self.maces:
+            game_world.add_object(mace, 1)
+
+        for mace2 in self.maces2:
+            game_world.add_object(mace2, 1)
+
         game_world.add_collision_pair('dragon:enemy', self.dragons, None)
         game_world.add_collision_pair('mouse:enemy', self.mouses, None)
+        game_world.add_collision_pair('dragon:enemy2', self.dragons, None)
+        game_world.add_collision_pair('mouse:enemy2', self.mouses, None)
+
         for enemy in self.enemies:
             game_world.add_collision_pair('dragon:enemy', None, enemy)
 
         for enemy in self.enemies:
             game_world.add_collision_pair('mouse:enemy', None, enemy)
 
-        print("Stage1: 첫 번째 스테이지 화면입니다.")
+        for enemy in self.enemies:
+            game_world.add_collision_pair('mace:enemy', None, enemy)
+
+
+        for enemy2 in self.enemies2:
+            game_world.add_collision_pair('mouse:enemy2', None, enemy2)
+
+        for enemy2 in self.enemies2:
+            game_world.add_collision_pair('dragon:enemy2', None, enemy2)
+            game_world.add_collision_pair('mace:enemy2', None, enemy2)
+
+        for mace in self.maces:
+            game_world.add_collision_pair('mace:enemy', mace, None)
+            game_world.add_collision_pair('mace:enemy2', mace, None)
+
+        for mace2 in self.maces2:
+            game_world.add_collision_pair('mace2:enemy', mace2, None)
+            game_world.add_collision_pair('mace2:enemy2', mace2, None)
 
     def finish(self):
         game_world.remove_object(self.character)
@@ -101,16 +131,29 @@ class Stage1State:
                     new_mace = Mace1( self.character.x - self.x_offset, self.character.y)
                     self.maces.append(new_mace)
                     game_world.add_object(new_mace, 1)
+                    game_world.add_collision_pair('mace:enemy', [new_mace], self.enemies)
+                    game_world.add_collision_pair('mace:enemy2', [new_mace], self.enemies2)
+
                 if event.key == SDLK_k:
                     new_mace2 = Mace2(self.character.x - self.x_offset + 100, self.character.y)
                     self.maces.append(new_mace2)
                     game_world.add_object(new_mace2, 1)
-                if event.key == SDLK_2:
-                    new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
-                    self.dragons.append(new_dragon)
+                    game_world.add_collision_pair('mace2:enemy', [new_mace2], self.enemies)
+                    game_world.add_collision_pair('mace2:enemy2', [new_mace2], self.enemies2)
+
                 if event.key == SDLK_1:
                     new_mouse = Mouse(self.character.x - self.x_offset, self.character.y)
                     self.mouses.append(new_mouse)
+                    game_world.add_object(new_mouse, 1)
+                    game_world.add_collision_pair('mouse:enemy', [new_mouse], self.enemies)
+                    game_world.add_collision_pair('mouse:enemy2', [new_mouse], self.enemies2)
+
+                if event.key == SDLK_2:
+                    new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
+                    self.dragons.append(new_dragon)
+                    game_world.add_object(new_dragon, 1)
+                    game_world.add_collision_pair('dragon:enemy', [new_dragon], self.enemies)
+                    game_world.add_collision_pair('dragon:enemy2', [new_dragon], self.enemies2)
 
     def update(self):
         self.character.update()
@@ -123,6 +166,9 @@ class Stage1State:
 
         for enemy in self.enemies:
             enemy.update()
+
+        for enemy2 in self.enemies2:
+            enemy2.update()
 
         for mace in self.maces:
             mace.update()
@@ -167,6 +213,9 @@ class Stage1State:
 
         for enemy in self.enemies:
             enemy.draw()
+
+        for enemy2 in self.enemies2:
+            enemy2.draw()
 
         for mace in self.maces:
             mace.draw()

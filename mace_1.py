@@ -38,5 +38,5 @@ class Mace1:
         pass
 
     def handle_collision(self, other, group):
-        if group == 'enemy:mace1':
-            self.iscollision = 1
+        if group == 'mace:enemy':
+            other.stamina -= 30
