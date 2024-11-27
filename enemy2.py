@@ -49,6 +49,9 @@ class Enemy2:
         return self.x - 40, self.y - 60, self.x + 40, self.y + 60
 
     def handle_collision(self, group, other):
+        if self.is_removed:
+            return
+
         if group == 'dragon:enemy2' or group == 'mouse:enemy2':
             self.iscollision = 1
             self.state = 1
@@ -62,8 +65,9 @@ class Enemy2:
                 self.state = 0
                 self.iscollision = 0
 
-        elif group == 'mace:enemy':
+        elif group == 'mace:enemy2' or group == 'mace2:enemy2':
             self.stamina -= 1
+
         elif group == 'enemy:player':
             self.iscollision = 1
             if self.time >= 6.0:

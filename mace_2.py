@@ -35,9 +35,9 @@ class Mace2:
             draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 40, self.y-60, self.x+40, self.y+60
+        return self.x + 100, self.y-60, self.x+340, self.y+60
         pass
 
     def handle_collision(self, other, group):
-        if group == 'enemy:mace2':
+        if group == 'mace2:enemy' or group == 'mace2:enemy2':
             other.state =2

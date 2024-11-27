@@ -3,7 +3,7 @@ import game_world
 import framework
 
 PIXEL_PER_METER = (10.0 / 0.4)
-RUN_SPEED_KMPH = 20.0
+RUN_SPEED_KMPH = 15.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -48,6 +48,9 @@ class Mouse:
         return self.x - 30, self.y - 50, self.x + 30, self.y + 50
 
     def handle_collision(self, group, other):
+        if self.is_removed:
+            return
+
         if group == 'mouse:enemy' or 'mouse:enemy2':
             self.iscollision = 1
             self.state= 1

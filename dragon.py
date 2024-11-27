@@ -15,7 +15,7 @@ FRAMES_PER_ACTION = 8
 
 class Dragon:
     def __init__(self,x,y):
-        self.x, self.y = x, y
+        self.x, self.y = x, y+20
         self.iscollision = 0
         self.is_removed = False
         self.state = 0  # 0: walk, 1: attack, 2: die
@@ -33,9 +33,14 @@ class Dragon:
             self.x = min(self.x, 1700)
         elif self.iscollision == 1:
             self.time += 0.1
+
+        if self.stamina <= 0:
+            self.state = 2
         if self.state == 2 and not self.is_removed:
             game_world.remove_object(self)
             self.is_removed = True
+            self.iscollision = 0
+
 
 
     def draw(self):
@@ -53,6 +58,9 @@ class Dragon:
         return self.x - 85, self.y - 85, self.x + 85, self.y + 85
 
     def handle_collision(self, group,other):
+        if self.is_removed:
+            return
+
         if group == 'dragon:enemy' or 'dragon:enemy2':
             self.iscollision = 1
             self.state = 1
@@ -60,8 +68,6 @@ class Dragon:
             if self.time >= 4.0:
                 self.time = 0.0
                 other.stamina -= 10
-            if self.stamina <= 0:
-                self.state = 2
             if other.stamina <= 0:
                 self.state = 0
                 self.iscollision = 0

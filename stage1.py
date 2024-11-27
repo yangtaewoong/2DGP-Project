@@ -4,7 +4,7 @@ from dragon import Dragon
 from mouse import Mouse
 from enemy import Enemy
 from enemy2 import Enemy2
-from mace_1 import Mace1
+from mace import Mace1
 from mace_2 import Mace2
 import framework
 import game_world
@@ -70,50 +70,25 @@ class Stage1State:
         for mace2 in self.maces2:
             game_world.add_object(mace2, 1)
 
-        game_world.add_collision_pair('dragon:enemy', self.dragons, None)
-        game_world.add_collision_pair('mouse:enemy', self.mouses, None)
-        game_world.add_collision_pair('dragon:enemy2', self.dragons, None)
-        game_world.add_collision_pair('mouse:enemy2', self.mouses, None)
-
-        for enemy in self.enemies:
-            game_world.add_collision_pair('dragon:enemy', None, enemy)
-
-        for enemy in self.enemies:
-            game_world.add_collision_pair('mouse:enemy', None, enemy)
-
-        for enemy in self.enemies:
-            game_world.add_collision_pair('mace:enemy', None, enemy)
-
-
-        for enemy2 in self.enemies2:
-            game_world.add_collision_pair('mouse:enemy2', None, enemy2)
-
-        for enemy2 in self.enemies2:
-            game_world.add_collision_pair('dragon:enemy2', None, enemy2)
-            game_world.add_collision_pair('mace:enemy2', None, enemy2)
-
-        for mace in self.maces:
-            game_world.add_collision_pair('mace:enemy', mace, None)
-            game_world.add_collision_pair('mace:enemy2', mace, None)
-
-        for mace2 in self.maces2:
-            game_world.add_collision_pair('mace2:enemy', mace2, None)
-            game_world.add_collision_pair('mace2:enemy2', mace2, None)
-
     def finish(self):
         game_world.remove_object(self.character)
         for enemy in self.enemies:
-            game_world.remove_object(enemy)
+            if not enemy.is_removed:
+                game_world.remove_object(enemy)
         for mace in self.maces:
-            game_world.remove_object(mace)
+            if not mace.is_removed:
+                game_world.remove_object(mace)
         for mace2 in self.maces2:
-            game_world.remove_object(mace2)
+            if not mace2.is_removed:
+                game_world.remove_object(mace2)
 
         for mouse in self.mouses:
-            game_world.remove_object(mouse)
+            if not mouse.is_removed:
+                game_world.remove_object(mouse)
 
         for dragon in self.dragons:
-            game_world.remove_object(dragon)
+            if not dragon.is_removed:
+                game_world.remove_object(dragon)
 
         del self.bg
         del self.character

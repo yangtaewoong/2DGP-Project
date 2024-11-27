@@ -31,9 +31,13 @@ class Enemy:
             self.x -= RUN_SPEED_PPS * framework.frame_time / 1.8
         elif self.iscollision == 1:
             self.time += 0.1
+
+        if self.stamina <= 0:
+            self.state = 2
         if self.state==2 and not self.is_removed:
             game_world.remove_object(self)
             self.is_removed = True
+            self.iscollision = 0
 
     def draw(self):
         if self.stamina > 0:
@@ -45,26 +49,30 @@ class Enemy:
             draw_rectangle(*self.get_bb())
 
 
+
     def get_bb(self):
         return self.x - 40, self.y - 60, self.x + 40, self.y + 60
 
     def handle_collision(self, group, other):
+        if self.is_removed:
+            return
+
         if group == 'dragon:enemy' or group == 'mouse:enemy':
             self.iscollision = 1
             self.state = 1
-            other.state = 1
+            #other.state = 1
             if self.time >= 4.0:
                 self.time = 0.0
                 self.stamina -= 10
                 other.stamina -= 5
-            if self.stamina <= 0:
-                self.state = 2
+
             if other.stamina <= 0:
                 self.state = 0
                 self.iscollision = 0
 
-        elif group == 'mace1:enemy':
-            self.stamina -= 30
+        elif group == 'mace:enemy' or group == 'mace2:enemy':
+            self.stamina -= 1
+
         elif group == 'enemy:player':
             self.iscollision = 1
             if self.time >= 6.0:

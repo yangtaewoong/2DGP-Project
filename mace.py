@@ -18,7 +18,6 @@ class Mace1:
         self.x, self.y,  = x,y
         self.frame = 0
         self.is_removed = False
-        self.iscollision = 1
         self.image = load_image('resource/mace/mace1_effect.png')
 
     def update(self):
@@ -35,8 +34,9 @@ class Mace1:
 
     def get_bb(self):
         return self.x - 40, self.y-60, self.x+40, self.y+60
-        pass
 
     def handle_collision(self, other, group):
-        if group == 'mace:enemy':
-            other.stamina -= 30
+        if group == 'mace:enemy' or group == 'mace:enemy2':
+            other.state = 2
+            other.stamina = 0
+
