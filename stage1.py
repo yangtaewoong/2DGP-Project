@@ -36,6 +36,23 @@ class UI:
     def draw(self):
         self.image.draw(530,155)
 
+class ManaBar:
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.fill_image = load_image('resource/mana_bar.png')
+
+    def draw(self, mana, max_mana):
+        # 채워진 마나 비율 계산
+        mana_ratio = mana / max_mana
+        fill_width = self.width * mana_ratio
+
+        # 채워진 마나 바 그리기
+        self.fill_image.clip_draw_to_origin(0, 0, int(fill_width), self.height,
+                                            self.x - self.width // 2, self.y - self.height // 2)
+
 
 class Stage1State:
     def __init__(self):
@@ -236,17 +253,7 @@ class Stage1State:
         draw_mana_bar(400, 50, 300, 20, self.mana, 100)
         update_canvas()
 
-def draw_mana_bar(x, y, width, height, mana, max_mana):
-    # 배경 바 그리기 (회색)
-    set_fill_color(100, 100, 100)  # 회색 설정
-    draw_rectangle(x, y, x + width, y + height)
 
-    # 채워진 마나 바 그리기
-    mana_ratio = mana / max_mana
-    fill_width = width * mana_ratio
-
-    set_color(0, 0, 255)  # 파란색 설정
-    draw_rectangle(x, y, x + fill_width, y + height)
 
 
 
