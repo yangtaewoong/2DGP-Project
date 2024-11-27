@@ -25,6 +25,7 @@ class Enemy:
         self.stamina = 50
         self.time = 0.0
 
+
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * framework.frame_time) % 5
         if self.iscollision == 0:
@@ -32,12 +33,9 @@ class Enemy:
         elif self.iscollision == 1:
             self.time += 0.1
 
-        if self.stamina <= 0:
-            self.state = 2
-        if self.state==2 and not self.is_removed:
-            game_world.remove_object(self)
-            self.is_removed = True
-            self.iscollision = 0
+
+
+
 
     def draw(self):
         if self.stamina > 0:
@@ -47,6 +45,7 @@ class Enemy:
                 self.image.clip_draw(int(self.frame) * 50, 65, 50, 65, self.x, self.y, 100, 130)
             self.font.draw(self.x - 10, self.y + 74, f'{self.stamina}', (255, 255, 255))
             draw_rectangle(*self.get_bb())
+
 
 
 

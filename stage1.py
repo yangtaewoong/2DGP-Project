@@ -9,7 +9,14 @@ from mace_2 import Mace2
 import framework
 import game_world
 
-
+PIXEL_PER_METER = (10.0 / 0.4)
+RUN_SPEED_KMPH = 20.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 width, height = 1060, 510
 
@@ -29,6 +36,7 @@ class UI:
     def draw(self):
         self.image.draw(530,155)
 
+
 class Stage1State:
     def __init__(self):
         self.x_offset = 0
@@ -42,7 +50,12 @@ class Stage1State:
         self.maces2 =[]
         self.dragons = []
         self.mouses =[]
-        self.ui = None  # UI 객체
+        self.ui = None
+        self.food = 0
+        self.mana = 0
+        self.food_timer = 0
+        self.mana_timer = 0
+        self.font = load_font('resource/ENCR10B.TTF', 30)
 
     def init(self):
         self.bg = BG('resource/background1.png')
@@ -102,28 +115,32 @@ class Stage1State:
                 framework.quit()
             elif event.type == SDL_KEYDOWN:
                 self.character.handle_event(event)
-                if event.key == SDLK_j:
+                if event.key == SDLK_j and self.mana >= 90:
+                    self.mana -= 90
                     new_mace = Mace1( self.character.x - self.x_offset, self.character.y)
                     self.maces.append(new_mace)
                     game_world.add_object(new_mace, 1)
                     game_world.add_collision_pair('mace:enemy', [new_mace], self.enemies)
                     game_world.add_collision_pair('mace:enemy2', [new_mace], self.enemies2)
 
-                if event.key == SDLK_k:
+                if event.key == SDLK_k and self.mana >= 30:
+                    self.mana -= 30
                     new_mace2 = Mace2(self.character.x - self.x_offset + 100, self.character.y)
                     self.maces.append(new_mace2)
                     game_world.add_object(new_mace2, 1)
                     game_world.add_collision_pair('mace2:enemy', [new_mace2], self.enemies)
                     game_world.add_collision_pair('mace2:enemy2', [new_mace2], self.enemies2)
 
-                if event.key == SDLK_1:
+                if event.key == SDLK_1 and self.food >=10:
+                    self.food -= 10
                     new_mouse = Mouse(self.character.x - self.x_offset, self.character.y)
                     self.mouses.append(new_mouse)
                     game_world.add_object(new_mouse, 1)
                     game_world.add_collision_pair('mouse:enemy', [new_mouse], self.enemies)
                     game_world.add_collision_pair('mouse:enemy2', [new_mouse], self.enemies2)
 
-                if event.key == SDLK_2:
+                if event.key == SDLK_2 and self.food >= 20:
+                    self.food -= 20
                     new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
                     self.dragons.append(new_dragon)
                     game_world.add_object(new_dragon, 1)
@@ -162,6 +179,20 @@ class Stage1State:
             self.x_offset = 0
         self.x_offset = max(0, min(self.x_offset, max_offset))
 
+        # 타이머 증가
+        self.food_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
+        self.mana_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
+
+        if self.food_timer > 3.0:
+            if self.food < 40:
+                self.food += 1
+            self.food_timer = 0
+
+        if self.mana_timer > 5.0:
+            if self.mana < 100:
+                self.mana += 1
+            self.mana_timer = 0
+
         # 충돌 처리
         game_world.handle_collisions()
 
@@ -199,6 +230,23 @@ class Stage1State:
             mace2.draw()
 
         self.ui.draw()
-
+        self.font.draw(120, 260, f'{self.food}', (255, 255, 255))
+        self.font.draw(860, 260, f'{self.mana}', (255, 255, 255))
+        self.font.draw(700, 25, f'{0}', (255, 255, 255))
+        draw_mana_bar(400, 50, 300, 20, self.mana, 100)
         update_canvas()
+
+def draw_mana_bar(x, y, width, height, mana, max_mana):
+    # 배경 바 그리기 (회색)
+    set_fill_color(100, 100, 100)  # 회색 설정
+    draw_rectangle(x, y, x + width, y + height)
+
+    # 채워진 마나 바 그리기
+    mana_ratio = mana / max_mana
+    fill_width = width * mana_ratio
+
+    set_color(0, 0, 255)  # 파란색 설정
+    draw_rectangle(x, y, x + fill_width, y + height)
+
+
 
