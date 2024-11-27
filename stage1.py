@@ -36,22 +36,36 @@ class UI:
     def draw(self):
         self.image.draw(530,155)
 
-class ManaBar:
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.fill_image = load_image('resource/mana_bar.png')
+class Mana:
+    def __init__(self):
+        self.mana = 0
+        self.x = 860  # 마나 바의 중심 x 좌표
+        self.y = 250 # 마나 바의 중심 y 좌표
+        self.width = width  # 마나 바의 전체 너비
+        self.height = height  # 마나 바의 전체 높이
+        self.mana_timer = 0
+        self.food = 0
+        self.image = load_image('resource/mana_bar.png')
+        self.font = load_font('resource/ENCR10B.TTF', 30)
 
-    def draw(self, mana, max_mana):
-        # 채워진 마나 비율 계산
-        mana_ratio = mana / max_mana
-        fill_width = self.width * mana_ratio
+    def update(self):
+        if self.mana_timer > 5.0:
+            if self.mana < 100:
+                self.mana += 1
+            self.mana_timer = 0
+
+    def draw_mana_bar(self):
+        self.font.draw(860, 260, f'{self.mana}', (255, 255, 255))
 
         # 채워진 마나 바 그리기
-        self.fill_image.clip_draw_to_origin(0, 0, int(fill_width), self.height,
-                                            self.x - self.width // 2, self.y - self.height // 2)
+        mana_ratio = self.mana / 40
+        fill_width = width *
+        self.image.clip_draw_to_origin(
+            0, 0, int(fill_width), self.height,  # 이미지에서 그릴 부분 (너비는 비율에 따라 조절)
+            self.x - self.width // 2, self.y - self.height // 2  # 화면에 그릴 위치
+        )
+
+
 
 
 class Stage1State:
@@ -68,16 +82,14 @@ class Stage1State:
         self.dragons = []
         self.mouses =[]
         self.ui = None
-        self.food = 0
-        self.mana = 0
-        self.food_timer = 0
-        self.mana_timer = 0
         self.font = load_font('resource/ENCR10B.TTF', 30)
+
 
     def init(self):
         self.bg = BG('resource/background1.png')
         self.character = Character()
         self.ui = UI()
+        self.mana =Mana()
         self.enemies = [Enemy() for _ in range(3)]
         self.enemies2 = [Enemy2() for _ in range(3)]
         game_world.add_object(self.character, 1)
@@ -205,10 +217,7 @@ class Stage1State:
                 self.food += 1
             self.food_timer = 0
 
-        if self.mana_timer > 5.0:
-            if self.mana < 100:
-                self.mana += 1
-            self.mana_timer = 0
+
 
         # 충돌 처리
         game_world.handle_collisions()
@@ -248,10 +257,12 @@ class Stage1State:
 
         self.ui.draw()
         self.font.draw(120, 260, f'{self.food}', (255, 255, 255))
-        self.font.draw(860, 260, f'{self.mana}', (255, 255, 255))
+
         self.font.draw(700, 25, f'{0}', (255, 255, 255))
-        draw_mana_bar(400, 50, 300, 20, self.mana, 100)
         update_canvas()
+
+
+
 
 
 
