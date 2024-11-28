@@ -39,34 +39,51 @@ class UI:
 class Mana:
     def __init__(self):
         self.mana = 0
-        self.x = 860  # 마나 바의 중심 x 좌표
-        self.y = 250 # 마나 바의 중심 y 좌표
-        self.width = width  # 마나 바의 전체 너비
-        self.height = height  # 마나 바의 전체 높이
+        self.x = 840  # 마나 바의 중심 x 좌표
+        self.y = 245 # 마나 바의 중심 y 좌표
+        self.width = 300 # 마나 바의 전체 너비
+        self.height = 25  # 마나 바의 전체 높이
         self.mana_timer = 0
-        self.food = 0
         self.image = load_image('resource/mana_bar.png')
         self.font = load_font('resource/ENCR10B.TTF', 30)
 
     def update(self):
+        self.mana_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
         if self.mana_timer > 5.0:
             if self.mana < 100:
                 self.mana += 1
             self.mana_timer = 0
 
     def draw_mana_bar(self):
-        self.font.draw(860, 260, f'{self.mana}', (255, 255, 255))
-
         # 채워진 마나 바 그리기
-        mana_ratio = self.mana / 40
-        fill_width = width *
-        self.image.clip_draw_to_origin(
-            0, 0, int(fill_width), self.height,  # 이미지에서 그릴 부분 (너비는 비율에 따라 조절)
-            self.x - self.width // 2, self.y - self.height // 2  # 화면에 그릴 위치
-        )
+        mana_ratio = self.mana / 100
+        fill_width = self.width * mana_ratio
+        self.image.clip_draw(0, 0, int(fill_width), self.height, self.x - (self.width - fill_width) / 2, self.y)
+        self.font.draw(820, 260, f'{self.mana}', (255, 255, 255))
 
+class Food:
+    def __init__(self):
+        self.food = 0
+        self.x = 220
+        self.y = 245
+        self.width = 300
+        self.height = 20
+        self.food_timer = 0
+        self.image = load_image('resource/food_bar.png')
+        self.font = load_font('resource/ENCR10B.TTF', 30)
 
+    def update(self):
+        self.food_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
+        if self.food_timer > 3.0:
+            if self.food < 40:
+                self.food += 1
+            self.food_timer = 0
 
+    def draw_food_bar(self):
+        mana_ratio = self.food / 40
+        fill_width = self.width * mana_ratio
+        self.image.clip_draw(0, 0, int(fill_width), self.height, self.x - (self.width - fill_width) / 2, self.y)
+        self.font.draw(100, 260, f'{self.food}', (255, 255, 255))
 
 class Stage1State:
     def __init__(self):
@@ -89,7 +106,8 @@ class Stage1State:
         self.bg = BG('resource/background1.png')
         self.character = Character()
         self.ui = UI()
-        self.mana =Mana()
+        self.mana = Mana()
+        self.food = Food()
         self.enemies = [Enemy() for _ in range(3)]
         self.enemies2 = [Enemy2() for _ in range(3)]
         game_world.add_object(self.character, 1)
@@ -144,32 +162,32 @@ class Stage1State:
                 framework.quit()
             elif event.type == SDL_KEYDOWN:
                 self.character.handle_event(event)
-                if event.key == SDLK_j and self.mana >= 90:
-                    self.mana -= 90
+                if event.key == SDLK_j and self.mana.mana >= 90:
+                    self.mana.mana -= 90
                     new_mace = Mace1( self.character.x - self.x_offset, self.character.y)
                     self.maces.append(new_mace)
                     game_world.add_object(new_mace, 1)
                     game_world.add_collision_pair('mace:enemy', [new_mace], self.enemies)
                     game_world.add_collision_pair('mace:enemy2', [new_mace], self.enemies2)
 
-                if event.key == SDLK_k and self.mana >= 30:
-                    self.mana -= 30
+                if event.key == SDLK_k and self.mana.mana >= 30:
+                    self.mana.mana -= 30
                     new_mace2 = Mace2(self.character.x - self.x_offset + 100, self.character.y)
                     self.maces.append(new_mace2)
                     game_world.add_object(new_mace2, 1)
                     game_world.add_collision_pair('mace2:enemy', [new_mace2], self.enemies)
                     game_world.add_collision_pair('mace2:enemy2', [new_mace2], self.enemies2)
 
-                if event.key == SDLK_1 and self.food >=10:
-                    self.food -= 10
+                if event.key == SDLK_1 and self.food.food >= 10:
+                    self.food.food -= 10
                     new_mouse = Mouse(self.character.x - self.x_offset, self.character.y)
                     self.mouses.append(new_mouse)
                     game_world.add_object(new_mouse, 1)
                     game_world.add_collision_pair('mouse:enemy', [new_mouse], self.enemies)
                     game_world.add_collision_pair('mouse:enemy2', [new_mouse], self.enemies2)
 
-                if event.key == SDLK_2 and self.food >= 20:
-                    self.food -= 20
+                if event.key == SDLK_2 and self.food.food >= 20:
+                    self.food.food -= 20
                     new_dragon = Dragon(self.character.x - self.x_offset, self.character.y)
                     self.dragons.append(new_dragon)
                     game_world.add_object(new_dragon, 1)
@@ -208,16 +226,8 @@ class Stage1State:
             self.x_offset = 0
         self.x_offset = max(0, min(self.x_offset, max_offset))
 
-        # 타이머 증가
-        self.food_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
-        self.mana_timer += ACTION_PER_TIME / FRAMES_PER_ACTION
-
-        if self.food_timer > 3.0:
-            if self.food < 40:
-                self.food += 1
-            self.food_timer = 0
-
-
+        self.mana.update()
+        self.food.update()
 
         # 충돌 처리
         game_world.handle_collisions()
@@ -256,9 +266,11 @@ class Stage1State:
             mace2.draw()
 
         self.ui.draw()
-        self.font.draw(120, 260, f'{self.food}', (255, 255, 255))
+
 
         self.font.draw(700, 25, f'{0}', (255, 255, 255))
+        self.mana.draw_mana_bar()
+        self.food.draw_food_bar()
         update_canvas()
 
 
