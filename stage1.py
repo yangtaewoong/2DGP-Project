@@ -6,6 +6,7 @@ from enemy import Enemy
 from enemy2 import Enemy2
 from mace import Mace1
 from mace_2 import Mace2
+from rhino import Rhino
 import framework
 import game_world
 
@@ -27,7 +28,7 @@ class BG:
         self.height = 578
 
     def draw(self, x_offset, y_offset):
-        self.image.draw(width // 2 - x_offset, y_offset, self.width, self.height)
+        self.image.draw(width// 2 - x_offset, y_offset, self.width, self.height)
 
 class UI:
     def __init__(self):
@@ -97,7 +98,8 @@ class Stage1State:
         self.maces = []
         self.maces2 =[]
         self.dragons = []
-        self.mouses =[]
+        self.mouses = []
+        self.rhinos = []
         self.ui = None
         self.font = load_font('resource/ENCR10B.TTF', 30)
 
@@ -112,11 +114,14 @@ class Stage1State:
         self.enemies2 = [Enemy2() for _ in range(3)]
         game_world.add_object(self.character, 1)
 
+        for mouse in self.mouses:
+            game_world.add_object(mouse, 1)
+
         for dragon in self.dragons:
             game_world.add_object(dragon, 1)
 
-        for mouse in self.mouses:
-            game_world.add_object(mouse, 1)
+        for rhino in self.rhinos:
+            game_world.add_object(rhino, 1)
 
         for enemy in self.enemies:
             game_world.add_object(enemy,1)
@@ -138,6 +143,7 @@ class Stage1State:
         for mace in self.maces:
             if not mace.is_removed:
                 game_world.remove_object(mace)
+
         for mace2 in self.maces2:
             if not mace2.is_removed:
                 game_world.remove_object(mace2)
@@ -149,6 +155,10 @@ class Stage1State:
         for dragon in self.dragons:
             if not dragon.is_removed:
                 game_world.remove_object(dragon)
+
+        for rhino in self.rhinos:
+            if not rhino.is_removed:
+                game_world.remove_object(rhino)
 
         del self.bg
         del self.character
@@ -194,6 +204,14 @@ class Stage1State:
                     game_world.add_collision_pair('dragon:enemy', [new_dragon], self.enemies)
                     game_world.add_collision_pair('dragon:enemy2', [new_dragon], self.enemies2)
 
+                if event.key == SDLK_3 and self.food.food >= 30:
+                    self.food.food -= 30
+                    new_rhino = Rhino(self.character.x - self.x_offset, self.character.y)
+                    self.dragons.append(new_rhino)
+                    game_world.add_object(new_rhino, 1)
+                    game_world.add_collision_pair('rhino:enemy', [new_rhino], self.enemies)
+                    game_world.add_collision_pair('rhino:enemy2', [new_rhino], self.enemies2)
+
     def update(self):
         self.character.update()
 
@@ -202,6 +220,9 @@ class Stage1State:
 
         for mouse in self.mouses:
             mouse.update()
+
+        for rhino in self.rhinos:
+            rhino.update()
 
         for enemy in self.enemies:
             enemy.update()
@@ -218,7 +239,7 @@ class Stage1State:
         char_x, char_y = self.character.get_position()
 
         scroll_start = 200
-        max_offset = self.bg.width - 2197
+        max_offset = self.bg.width - width
 
         if char_x > scroll_start:
             self.x_offset = char_x - scroll_start
@@ -252,6 +273,9 @@ class Stage1State:
 
         for mouse in self.mouses:
             mouse.draw()
+
+        for rhino in self.rhinos:
+            rhino.draw()
 
         for enemy in self.enemies:
             enemy.draw()

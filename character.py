@@ -64,7 +64,7 @@ class Run:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 100, 380
+        self.x, self.y = 20, 380
         self.frame = 0
         self.face_dir = 1
         self.stamina = 100

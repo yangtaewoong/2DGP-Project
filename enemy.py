@@ -33,6 +33,13 @@ class Enemy:
         elif self.iscollision == 1:
             self.time += 0.1
 
+        if self.stamina <= 0:
+            self.state = 2
+
+        if self.state == 2 and not self.is_removed:
+            game_world.remove_object(self)
+            self.is_removed = True
+
 
 
 
