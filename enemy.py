@@ -41,9 +41,6 @@ class Enemy:
             self.is_removed = True
 
 
-
-
-
     def draw(self):
         if self.stamina > 0:
             if self.state == 0:
@@ -51,9 +48,6 @@ class Enemy:
             elif self.state == 1:
                 self.image.clip_draw(int(self.frame) * 50, 65, 50, 65, self.x, self.y, 100, 130)
             self.font.draw(self.x - 10, self.y + 74, f'{self.stamina}', (255, 255, 255))
-            draw_rectangle(*self.get_bb())
-
-
 
 
     def get_bb(self):

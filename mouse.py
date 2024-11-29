@@ -42,7 +42,6 @@ class Mouse:
             if self.state == 1:
                 self.image.clip_draw(int(self.frame) * 57,0, 57, 51, self.x, self.y, 100, 120)
             self.font.draw(self.x - 20, self.y + 51, f'{self.stamina}', (255, 255, 255))
-            draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.x - 30, self.y - 50, self.x + 30, self.y + 50

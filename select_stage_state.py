@@ -43,6 +43,6 @@ class SelectStageState:
         right = select_button_x + (select_button_width // 2)
         bottom = select_button_y - (select_button_height // 2)
         top = select_button_y + (select_button_height // 2)
-        draw_rectangle(left, bottom, right, top)
+        #draw_rectangle(left, bottom, right, top)
 
         update_canvas()

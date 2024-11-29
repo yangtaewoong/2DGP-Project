@@ -28,7 +28,7 @@ class IntroState:
             if event.type == SDL_MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = event.x, height - event.y
                 if is_inside_button(mouse_x, mouse_y, play_button_x, play_button_y, play_button_width, play_button_height):
-                    print("Play 버튼이 클릭되었습니다! SelectStageState로 전환합니다.")
+                    #print("Play 버튼이 클릭되었습니다! SelectStageState로 전환합니다.")
                     framework.change_mode(select_stage_state.SelectStageState())
             elif event.type == SDL_QUIT:
                 framework.quit()
@@ -44,6 +44,6 @@ class IntroState:
         right = play_button_x + (play_button_width // 2)
         bottom = play_button_y - (play_button_height // 2)
         top = play_button_y + (play_button_height // 2)
-        draw_rectangle(left, bottom, right, top)
+        #draw_rectangle(left, bottom, right, top)
 
         update_canvas()

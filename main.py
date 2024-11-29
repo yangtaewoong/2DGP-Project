@@ -1,8 +1,7 @@
 from pico2d import *
 import framework
 import intro_state
-import play_mode
-import play_mode as stage1
+import game_clear
 
 open_canvas(1060, 700)
 framework.run(intro_state.IntroState())

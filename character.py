@@ -89,12 +89,8 @@ class Character:
     def draw(self):
         self.state_machine.draw()
 
-    def draw_at(self, screen_x, screen_y):
-
-        self.state_machine.cur_state.draw(self)
-
     def get_bb(self):
-        #return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+        return self.x - 50, self.y - 80, self.x + 50, self.y + 80
         pass
 
     def get_position(self):

@@ -48,7 +48,7 @@ class Rhino:
             elif self.state == 1:
                 self.image.clip_draw(int(self.frame) * 128, 128, 128,149, self.x, self.y,166.4,193.7)
             self.font.draw(self.x, self.y + 74, f'{self.stamina}', (255, 255, 255))
-            draw_rectangle(*self.get_bb())
+
 
 
     def get_bb(self):

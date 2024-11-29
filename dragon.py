@@ -50,7 +50,7 @@ class Dragon:
             elif self.state == 1:
                 self.image.clip_draw(int(self.frame) * 170, 170, 170, 170, self.x, self.y, 200, 200)
             self.font.draw(self.x, self.y + 65, f'{self.stamina}', (255, 255, 255))
-            draw_rectangle(*self.get_bb())
+
 
 
     def get_bb(self):

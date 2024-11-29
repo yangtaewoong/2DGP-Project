@@ -9,6 +9,7 @@ from mace_2 import Mace2
 from rhino import Rhino
 import framework
 import game_world
+import game_clear
 
 PIXEL_PER_METER = (10.0 / 0.4)
 RUN_SPEED_KMPH = 20.0
@@ -113,6 +114,10 @@ class Stage1State:
         self.enemies = [Enemy() for _ in range(3)]
         self.enemies2 = [Enemy2() for _ in range(3)]
         game_world.add_object(self.character, 1)
+        game_world.add_collision_pair('character:enemy', self.character, None)
+        for enemy in self.enemies:
+            game_world.add_collision_pair('character:enemy', None, enemy)
+
 
         for mouse in self.mouses:
             game_world.add_object(mouse, 1)
@@ -239,7 +244,7 @@ class Stage1State:
         char_x, char_y = self.character.get_position()
 
         scroll_start = 200
-        max_offset = self.bg.width - width
+        max_offset = self.bg.width - 2190
 
         if char_x > scroll_start:
             self.x_offset = char_x - scroll_start
@@ -252,6 +257,9 @@ class Stage1State:
 
         # 충돌 처리
         game_world.handle_collisions()
+
+        if char_x >= self.bg.width - width - 100:
+            framework.change_mode(game_clear.Gameclear())
 
     def draw(self):
         clear_canvas()
