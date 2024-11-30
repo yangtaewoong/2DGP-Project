@@ -27,6 +27,9 @@ class BG:
         self.image = load_image(image_path)
         self.width = 3257
         self.height = 578
+        self.bgm = load_music('resource/bgm.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
     def draw(self, x_offset, y_offset):
         self.image.draw(width// 2 - x_offset, y_offset, self.width, self.height)
