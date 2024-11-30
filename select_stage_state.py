@@ -1,10 +1,14 @@
 from pico2d import *
 import framework
 import stage1
+import stage2
+import stage3
 
 # 이미지 로드
 width, height = 1060, 700
 select_button_x, select_button_y,select_button_width, select_button_height = 330, 330, 100, 150
+select_button_x2, select_button_y2 = 500, 330
+select_button_x3, select_button_y3 = 670, 330
 
 def is_inside_button(x, y, button_x, button_y, button_width, button_height):
     return (button_x - button_width // 2 <= x <= button_x + button_width // 2 and
@@ -27,8 +31,14 @@ class SelectStageState:
             if event.type == SDL_MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = event.x, height - event.y
                 if is_inside_button(mouse_x, mouse_y, select_button_x, select_button_y,select_button_width, select_button_height):
-                    print("Play 버튼이 클릭되었습니다! SelectStageState로 전환합니다.")
                     framework.change_mode(stage1.Stage1State())
+                if is_inside_button(mouse_x, mouse_y, select_button_x2, select_button_y2, select_button_width,
+                                    select_button_height):
+                    framework.change_mode(stage2.Stage2State())
+                if is_inside_button(mouse_x, mouse_y, select_button_x3, select_button_y3, select_button_width,
+                                    select_button_height):
+                    framework.change_mode(stage3.Stage3State())
+
             elif event.type == SDL_QUIT or (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
                 framework.quit()
 
@@ -39,10 +49,10 @@ class SelectStageState:
         clear_canvas()
         select_stage_image.draw(width // 2, height // 2, width, height)
 
-        left = select_button_x - (select_button_width // 2)
-        right = select_button_x + (select_button_width // 2)
-        bottom = select_button_y - (select_button_height // 2)
-        top = select_button_y + (select_button_height // 2)
+        left = select_button_x3 - (select_button_width // 2)
+        right = select_button_x3 + (select_button_width // 2)
+        bottom = select_button_y3 - (select_button_height // 2)
+        top = select_button_y3 + (select_button_height // 2)
         #draw_rectangle(left, bottom, right, top)
 
         update_canvas()
