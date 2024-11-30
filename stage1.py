@@ -25,6 +25,9 @@ width, height = 1060, 510
 class BG:
     def __init__(self, image_path):
         self.image = load_image(image_path)
+        self.bgm = load_music('resource/bgm.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
         self.width = 3257
         self.height = 578
 
