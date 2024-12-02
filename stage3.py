@@ -114,8 +114,8 @@ class Stage3State:
         self.ui = UI()
         self.mana = Mana()
         self.food = Food()
-        self.enemies = [Enemy() for _ in range(5)]
-        self.enemies2 = [Enemy2() for _ in range(5)]
+        self.enemies = [Enemy() for _ in range(7)]
+        self.enemies2 = [Enemy2() for _ in range(7)]
         game_world.add_object(self.character, 1)
         game_world.add_collision_pair('character:enemy', self.character, None)
         for enemy in self.enemies:

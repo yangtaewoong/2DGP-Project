@@ -40,9 +40,8 @@ class Enemy2:
             if self.state == 0:
                 self.image.clip_draw(int(self.frame) * 90, 0, 90, 130, self.x, self.y, 100, 150)
             elif self.state == 1:
-                self.image.clip_draw(int(self.frame) * 90, 130, 90, 130, self.x, self.y, 100, 150)
+                self.image.clip_draw(int(self.frame) * 90, 0, 90, 130, self.x, self.y, 100, 150)
             self.font.draw(self.x - 10, self.y + 74, f'{self.stamina}', (255, 255, 255))
-            draw_rectangle(*self.get_bb())
 
 
     def get_bb(self):

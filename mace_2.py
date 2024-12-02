@@ -32,7 +32,7 @@ class Mace2:
     def draw(self):
         if not self.is_removed:
             self.image.clip_draw(int(self.frame) * 161, 0, 161, 71, self.x + 230, self.y - 50, 330, 228)
-            draw_rectangle(*self.get_bb())
+
 
     def get_bb(self):
         return self.x + 100, self.y-60, self.x+340, self.y+60

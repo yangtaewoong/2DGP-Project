@@ -28,9 +28,9 @@ class Mace1:
             self.is_removed = True
 
     def draw(self):
-        if self.x < 1100:
+        if self.x < 1000:
             self.image.clip_draw(int(self.frame) * 65, 0, 65, 57, self.x, self.y, 131.6, 114)
-            draw_rectangle(*self.get_bb())
+
 
     def get_bb(self):
         return self.x - 40, self.y-60, self.x+40, self.y+60
